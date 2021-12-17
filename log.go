@@ -14,25 +14,12 @@ func init() {
 }
 
 type Logger interface {
-	Info(msg string, keysAndValues ...interface{})
-	Infof(format string, args ...interface{})
-
 	Flush()
 }
 
 type zapLogger struct {
 	level zapcore.Level
 	log   *zap.Logger
-}
-
-func (l *zapLogger) Info(msg string, keysAndValues ...interface{}) {
-	if checkedEntry := l.log.Check(l.level, msg); checkedEntry != nil {
-		checkedEntry.Write(handleFields(l.log, keysAndValues)...)
-	}
-}
-
-func (l *zapLogger) Infof(format string, args ...interface{}) {
-	l.log.Sugar().Infof(format, args...)
 }
 
 func (l *zapLogger) Flush() {
